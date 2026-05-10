@@ -1,19 +1,15 @@
-name: Java CI with Maven
+name: Coveralls
 
-#pipeline starts on every push or pull_request
 on: [push, pull_request]
 
 jobs:
-  build:
+  coverage:
     runs-on: ubuntu-latest
 
     steps:
-
-      # Checkout code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Setup Java
       - name: Set up JDK 8
         uses: actions/setup-java@v3
         with:
@@ -21,10 +17,10 @@ jobs:
           java-version: '8'
           cache: 'maven'
 
-      # project compilation
-      - name: Compile project
-        run: mvn compile
-
-      # Unit tests execution
-      - name: Unit Test
+      - name: Run tests
         run: mvn test
+
+      - name: Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
